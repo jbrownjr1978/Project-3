@@ -17,12 +17,12 @@ public class ProductDAO {
     public void insertProduct(Product p){
         try{
             PreparedStatement ps = conn.prepareStatement("insert into Product" +
-                    " (product_id, product_Name, price, sold_by) " +
+                    " (product_id, product_Name, price, seller_Name) " +
                     "values (?, ?, ?, ?)");
-            ps.setInt(1, p.getProductId());
+            ps.setLong(1, p.getProductId());
             ps.setString(2, p.getProductName());
             ps.setDouble(3, p.getPrice());
-            ps.setInt(4, p.getSoldBy());
+            ps.setString(4, p.getSellerName());
             ps.executeUpdate();
         }catch(SQLException e){
             e.printStackTrace();
@@ -34,11 +34,11 @@ public class ProductDAO {
             PreparedStatement ps = conn.prepareStatement("select * from product");
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
-                int productId = rs.getInt("product_id");
+                long productId = rs.getInt("product_id");
                 String productName = rs.getString("product_Name");
                 double price = rs.getInt("price");
-                int soldBy = rs.getInt("sold_by");
-                Product p = new Product(productId, productName, price, soldBy);
+                String sellerName = rs.getString("seller_name");
+                Product p = new Product(productId, productName, price, sellerName);
                 resultProducts.add(p);
             }
         }catch (SQLException e){
@@ -46,17 +46,17 @@ public class ProductDAO {
         }
         return resultProducts;
     }
-    public Product getProductById(int id){
+    public Product getProductById(long id){
         try{
             PreparedStatement ps = conn.prepareStatement("select * from Product where product_id = ?");
-            ps.setInt(1, id);
+            ps.setLong(1, id);
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
                 int productId = rs.getInt("product_id");
                 String productName = rs.getString("product_Name");
                 double price = rs.getInt("price");
-                int soldBy = rs.getInt("sold_by");
-                Product p = new Product(productId, productName, price, soldBy);
+                String sellerName = rs.getString("seller_Name");
+                Product p = new Product(productId, productName, price, sellerName);
                 return p;
             }
         }catch(SQLException e){
@@ -74,8 +74,8 @@ public class ProductDAO {
                 int productId = rs.getInt("product_id");
                 String productName = rs.getString("product_Name");
                 double price = rs.getDouble( "price");
-                int soldBy = rs.getInt("sold_by");
-                Product p = new Product(productId, productName, price, soldBy);
+                String sellerName = rs.getString("seller_Name");
+                Product p = new Product(productId, productName, price, sellerName);
                 resultProducts.add(p);
             }
         }catch(SQLException e){

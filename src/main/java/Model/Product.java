@@ -2,27 +2,27 @@ package Model;
 import java.util.Objects;
 
 public class Product {
-    public int productId;
+    public long productId;
     public String productName;
     public double price;
-    public int soldBy;
+    public String sellerName;
 
     public Product() {
 
     }
 
-    public Product(int productId, String productName, double price, int soldBy) {
+    public Product(long productId, String productName, double price, String sellerName) {
         this.productId = productId;
         this.productName = productName;
         this.price = price;
-        this.soldBy = soldBy;
+        this.sellerName = sellerName;
     }
-    public int getProductId() {
+    public long getProductId() {
         return productId;
     }
 
-    public void setProductId(int paintingId) {
-        this.productId = paintingId;
+    public void setProductId(long productId) {
+        this.productId = productId;
     }
 
     public String getProductName() {
@@ -41,25 +41,27 @@ public class Product {
         this.price = price;
     }
 
-    public int getSoldBy() {
-        return soldBy;
+    public String getSellerName() {
+        return sellerName;
     }
 
-    public void setSoldBy(int soldBy) {
-        this.soldBy = soldBy;
+    public void setSellerName(String sellerName) {
+        this.sellerName = sellerName;
     }
+
+
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
-        return productId == product.productId && Double.compare(product.price, price) == 0 && soldBy == product.soldBy && Objects.equals(productName, product.productName);
+        return productId == product.productId && Double.compare(product.price, price) == 0 && sellerName == product.sellerName && Objects.equals(productName, product.productName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(productId, productName, price, soldBy);
+        return Objects.hash(productId, productName, price, sellerName);
     }
 
     @Override
@@ -68,7 +70,7 @@ public class Product {
                 "productId=" + productId +
                 ", productName='" + productName + '\'' +
                 ", price=" + price +
-                ", soldBy=" + soldBy +
+                ", soldBy=" + sellerName +
                 '}';
     }
 }

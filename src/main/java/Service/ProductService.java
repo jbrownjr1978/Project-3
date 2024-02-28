@@ -1,5 +1,6 @@
 package Service;
 import Exceptions.ProductAlreadyExistsException;
+import Exceptions.ProductException;
 import Model.Product;
 import DAO.ProductDAO;
 import java.util.List;
@@ -10,7 +11,7 @@ public class ProductService {
         this.productDAO = productDAO;
     }
     public void saveProduct(Product p) throws ProductAlreadyExistsException {
-        int id = p.getProductId();
+        long id = p.getProductId();
 //        If no product with that id was found - insert the product
         if(productDAO.getProductById(id) == null){
             productDAO.insertProduct(p);
@@ -26,6 +27,19 @@ public class ProductService {
     }
     public List<Product> getAllProducts(){
         return productDAO.getAllProducts();
+    }
+
+    public Product addProduct(Product p) throws ProductException {
+        if (p.getPrice() <= 0 || p.getProductName() == null || p.getSellerName() == null){
+            throw new ProductException("price, sellerName, and productName fields must not be empty");
+
+        }
+
+        long id = (long) (Math.random() * Long.MAX_VALUE);
+        p.setProductId(id);
+        productDAO.getAllProducts().add(p);
+        return p;
+
     }
 
 }

@@ -46,13 +46,9 @@ public class Controller {
         app.post("product", context -> {
             ObjectMapper om = new ObjectMapper();
             Product p = om.readValue(context.body(), Product.class);
-            try{
-                productService.saveProduct(p);
-                context.status(201);
-            }catch(ProductAlreadyExistsException e){
-                context.status(400);
-                context.result(e.getMessage());
-            }
+            Product newProduct = productService.addProduct(p);
+            context.status(201);
+            context.json(newProduct);
 
         });
         /*
@@ -61,7 +57,7 @@ public class Controller {
         Grab a query param (the part after ?), and check if it matches some value
         to change the behavior of my api
          */
-        app.get("product", context -> {
+        app.get("product/byprice", context -> {
             String order = context.queryParam("orderedBy");
             if(order!= null && order.equals("price")){
                 List<Product> products = productService.getProductsByPrice();
@@ -72,25 +68,16 @@ public class Controller {
                 context.json(products);
             }
         });
-        /*
-        valid way to get all paintings of an artist
-        GET /artist/{artistId}/painting
-        valid way to post a painting that belongs to a specific artist
-        POST /artist/{artistId}/painting
 
-        GET /painting?artist={artistId}
-        GET /painting/
-        POST /painting/
-         */
+        app.get("product", context -> {
+            List<Product> productList = productService.getAllProducts();
+            context.json(productList);
+        });
+
         return app;
     }
 
-    /**
-     * This is an example handler for an example endpoint.
-     * @param context The Javalin Context object manages information about both the HTTP request and response.
-     */
-    private void exampleHandler(Context context) {
-        context.json("sample text");
-    }
+
+
 
 }
