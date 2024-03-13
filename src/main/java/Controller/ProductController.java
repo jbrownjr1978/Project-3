@@ -70,7 +70,8 @@ public class Controller {
         });
 
         app.get("product", context -> {
-            List<Product> productList = productService.getAllProducts();
+            System.out.println("Am I working?");
+           List<Product> productList = productService.getAllProducts();
             context.json(productList);
         });
 

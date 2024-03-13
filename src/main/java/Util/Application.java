@@ -1,26 +1,32 @@
 package Util;
-import Controller.Controller;
-import DAO.SellerDAO;
+
+import Controller.ProductController;
 import DAO.ProductDAO;
+import DAO.SellerDAO;
 import Service.ProductService;
 import Service.SellerService;
-import Util.ConnectionSingleton;
 import io.javalin.Javalin;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 
-public class Application {
+public class Main {
+    public static Logger log = LoggerFactory.getLogger(Main.class);
+
     public static void main(String[] args) {
         Connection conn = ConnectionSingleton.getConnection();
         SellerDAO sellerDAO = new SellerDAO(conn);
-        ProductDAO productDAO = new ProductDAO(conn);
+        ProductService productService = null;
+        ProductDAO productDAO = new ProductDAO(conn, productService);
+        //       ProductService productService = new ProductService(productDAO);
+//        ModuleLayer.Controller controller = new ModuleLayer.Controller(sellerService, productService);
+//        ProductController productController = new ProductController(sellerService,productService);
         SellerService sellerService = new SellerService(sellerDAO);
-        ProductService productService = new ProductService(productDAO);
-        Controller controller = new Controller(sellerService, productService);
-
-        Javalin api = controller.getAPI();
-        api.start(9007);
+        productService = new ProductService(productDAO, sellerService);
+        ProductController productController = new ProductController(sellerService, productService);
+        Javalin api = productController.getAPI();
+        api.start(9002);
     }
-
-
 }
+
